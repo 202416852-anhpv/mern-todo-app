@@ -1,0 +1,12 @@
+@baseUrl = http://localhost:5000
+
+###
+GET {{baseUrl}}/api/todos
+
+###
+POST {{baseUrl}}/api/todos
+Content-Type: application/json
+
+{
+  "title": "Learn Python"
+}

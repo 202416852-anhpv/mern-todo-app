@@ -7,3 +7,18 @@ export const findAll = async (): Promise<ITodo[]> => {
 export const create = async (data: { title: string }): Promise<ITodo> => {
   return Todo.create(data);
 };
+
+export const findById = async (id: string): Promise<ITodo | null> => {
+  return Todo.findById(id);
+};
+
+export const deleteById = async (id: string): Promise<ITodo | null> => {
+  return Todo.findByIdAndDelete(id);
+};
+
+export const updateById = async (
+  id: string,
+  data: Partial<Pick<ITodo, "title" | "completed">>,
+): Promise<ITodo | null> => {
+  return Todo.findByIdAndUpdate(id, data, { new: true });
+};

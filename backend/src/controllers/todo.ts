@@ -1,7 +1,5 @@
 import type { Request, Response } from "express";
-import { z } from "zod";
 import * as todoService from "../services/todo.js";
-import { createTodoSchema } from "../validations/todo.js";
 
 export const getTodos = async (_req: Request, res: Response) => {
   const todos = await todoService.getAllTodos();
@@ -9,15 +7,12 @@ export const getTodos = async (_req: Request, res: Response) => {
 };
 
 export const createTodo = async (req: Request, res: Response) => {
-  const parsed = createTodoSchema.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({
-      message: "Validation failed",
-      errors: z.flattenError(parsed.error).fieldErrors,
-    });
+  const { title } = req.body;
+  if (!title) {
+    res.status(400).json({ message: "Title is required" });
     return;
   }
-  const todo = await todoService.createTodo(parsed.data.title);
+  const todo = await todoService.createTodo(title);
   res.status(201).json(todo);
 };
 

@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import { z } from "zod";
 import * as todoService from "../services/todo.js";
 import { createTodoSchema } from "../validations/todo.js";
+import { AppError, ERROR_MESSAGES } from "../errors/index.js";
 
 export const getTodos = async (_req: Request, res: Response) => {
   const todos = await todoService.getAllTodos();
@@ -11,32 +11,24 @@ export const getTodos = async (_req: Request, res: Response) => {
 export const createTodo = async (req: Request, res: Response) => {
   const parsed = createTodoSchema.safeParse(req.body);
   if (!parsed.success) {
-    res.status(400).json({
-      message: "Validation failed",
-      errors: z.flattenError(parsed.error).fieldErrors,
-    });
-    return;
+    throw new AppError(ERROR_MESSAGES.VALIDATION_FAILED, 400);
   }
   const todo = await todoService.createTodo(parsed.data.title);
   res.status(201).json(todo);
 };
 
 export const deleteTodo = async (req: Request, res: Response) => {
-  const id = req.params.id as string;
-  const todo = await todoService.deleteTodo(id);
+  const todo = await todoService.deleteTodo(req.params.id as string);
   if (!todo) {
-    res.status(404).json({ message: "Todo not found" });
-    return;
+    throw new AppError(ERROR_MESSAGES.TODO_NOT_FOUND, 404);
   }
   res.status(204).send();
 };
 
 export const toggleTodo = async (req: Request, res: Response) => {
-  const id = req.params.id as string;
-  const todo = await todoService.toggleTodo(id);
+  const todo = await todoService.toggleTodo(req.params.id as string);
   if (!todo) {
-    res.status(404).json({ message: "Todo not found" });
-    return;
+    throw new AppError(ERROR_MESSAGES.TODO_NOT_FOUND, 404);
   }
   res.json(todo);
 };

@@ -13,6 +13,7 @@ import TodoList from "../containers/TodoList";
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [titleInput, setTitleInput] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -77,7 +78,13 @@ export default function Home() {
 
   return (
     <div className="max-w-xl mx-auto p-6 font-mono">
-      <SearchBar value={searchQuery} onChange={debouncedSetSearch} />
+      <SearchBar
+        value={inputValue}
+        onChange={(val) => {
+          setInputValue(val);
+          debouncedSetSearch(val);
+        }}
+      />
       <TodoInput value={titleInput} onChange={setTitleInput} onAdd={handleAdd} />
       {error && (
         <p className="text-red-600 font-mono text-base mb-4">{error}</p>

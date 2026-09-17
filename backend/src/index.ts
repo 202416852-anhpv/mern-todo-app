@@ -6,12 +6,14 @@ import logger from "./logger/index.js";
 import todoRoutes from "./routes/todo.js";
 import { AppError } from "./errors/index.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { rateLimiter } from "./middlewares/rateLimiter.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(rateLimiter);
 app.use("/api/todos", todoRoutes);
 
 app.use((req, _res, next) => {

@@ -3,10 +3,12 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import logger from "./logger/index.js";
+import authRoutes from "./routes/auth.js";
 import todoRoutes from "./routes/todo.js";
 import { AppError } from "./errors/index.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { rateLimiter } from "./middlewares/rateLimiter.js";
+import { authMiddleware } from "./middlewares/auth.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 5000;
@@ -14,7 +16,8 @@ const PORT = process.env.PORT ?? 5000;
 app.use(cors());
 app.use(express.json());
 app.use(rateLimiter);
-app.use("/api/todos", todoRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/todos", authMiddleware, todoRoutes);
 
 app.use((req, _res, next) => {
   next(new AppError(`Route ${req.method} ${req.originalUrl} not found`, 404));

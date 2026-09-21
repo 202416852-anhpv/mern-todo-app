@@ -8,6 +8,7 @@ import {
 } from "../api/todo";
 import TodoInput from "../components/TodoInput";
 import SearchBar from "../components/SearchBar";
+import LogoutButton from "../components/LogoutButton";
 import TodoList from "../containers/TodoList";
 
 export default function Home() {
@@ -78,6 +79,10 @@ export default function Home() {
 
   return (
     <div className="max-w-xl mx-auto p-6 font-mono">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-xl font-bold text-[#201d1d]">Todo App</h1>
+        <LogoutButton />
+      </div>
       <SearchBar
         value={inputValue}
         onChange={(val) => {

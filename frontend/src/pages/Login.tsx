@@ -17,6 +17,7 @@ export default function Login() {
         <p className="text-[#424245] text-base mb-6 text-center">Sign in to continue</p>
         <div className="flex justify-center">
           <GoogleLogin
+            text="signin_with"
             onSuccess={(credentialResponse) => {
               if (credentialResponse.credential) {
                 login(credentialResponse.credential).then(() => navigate("/"));
